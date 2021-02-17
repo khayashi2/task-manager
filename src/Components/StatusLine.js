@@ -22,7 +22,7 @@ export default function StatusLine(props) {
                 <Task
                     addTask={(task) => addTask(task)}
                     deleteTask={(id) => deleteTask(id)}
-                    moveTask={(id, status) => moveTask(id)}
+                    moveTask={(id, status) => moveTask(id, status)}
                     key={task.id}
                     task={task}
 
@@ -30,9 +30,13 @@ export default function StatusLine(props) {
             )
         })
     }
-    return <div className="statusLine">
-        <h3>{status}</h3>
-        {taskList}
-        <button onClick={handleAddEmpty} className={"button addTask"}/>
-    </div>;
+    return(
+        <div className="statusLine">
+            <h3>{status}</h3>
+            {taskList}
+            <button onClick={handleAddEmpty} className="button addTask">
+                +
+            </button>
+        </div>
+    );
 }

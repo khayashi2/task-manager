@@ -13,15 +13,57 @@ export default function Task(props) {
     }
 
     function handleSubmit(event) {
-        //TODO
+        event.preventDefault();
+
+        if (formAction === "save") {
+            if (collapsed) {
+                setCollapsed(false);
+            } else {
+                let newTask = {
+                    id: task.id,
+                    title: event.target.elements.title.value,
+                    description: event.target.elements.description.value,
+                    urgency: urgencyLevel,
+                    status: task.status,
+                    isCollapsed: true,
+                };
+
+                addTask(newTask);
+                setCollapsed(true);
+            }
+        }
+
+        if (formAction === "delete") {
+            deleteTask(task.id);
+        }
     }
 
     function handleMoveLeft() {
-        //TODO
+        let newStatus = "";
+
+        if (task.status === "In Progress") {
+            newStatus = "Backlog";
+        } else if (task.status === "Done") {
+            newStatus = "In Progress";
+        }
+
+        if (newStatus !== "") {
+            moveTask(task.id, newStatus);
+        }
     }
 
     function handleMoveRight() {
-        //TODO
+        let newStatus = "";
+
+        if (task.status === "Backlog") {
+            newStatus = "In Progress";
+        } else if (task.status === "In Progress") {
+            newStatus = "Done";
+        }
+
+        if (newStatus !== "") {
+            moveTask(task.id, newStatus);
+        }
     }
 
     return (

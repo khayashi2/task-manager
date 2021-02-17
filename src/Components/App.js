@@ -4,29 +4,83 @@ import StatusLine from "./StatusLine"
 
 function App() {
   const [tasks, setTasks] = useState([])
+  useEffect(() => {
+    loadTasksFromLocalStorage();
+  }, []);
 
   function addEmptyTask(status) {
-    // do stuff
+    const lastTask = tasks[tasks.length - 1];
+
+    let newTaskId = 1;
+
+    if (lastTask !== undefined) {
+      newTaskId = lastTask.id + 1;
+    }
+
+    setTasks((tasks) => [
+      ...tasks,
+      {
+        id: newTaskId,
+        title: "",
+        description: "",
+        urgency: "",
+        status: status,
+      },
+    ]);
   }
 
   function addTask(taskToAdd) {
-    // do stuff
+    let filteredTasks = tasks.filter((task) => {
+      return task.id !== taskToAdd.id;
+    });
+
+    let newTaskList = [...filteredTasks, taskToAdd];
+
+    setTasks(newTaskList);
+
+    saveTasksToLocalStorage(newTaskList);
   }
 
   function deleteTask(taskId) {
-    // do stuff
+    let filteredTasks = tasks.filter((task) => {
+      return task.id !== taskId;
+    });
+
+    setTasks(filteredTasks);
+
+    saveTasksToLocalStorage(filteredTasks);
   }
 
   function moveTask(id, newStatus) {
-    // do stuff
+    let task = tasks.filter((task) => {
+      return task.id === id;
+    })[0];
+
+    let filteredTasks = tasks.filter((task) => {
+      return task.id !== id;
+    });
+
+    task.status = newStatus;
+
+    let newTaskList = [...filteredTasks, task];
+
+    setTasks(newTaskList);
+
+    saveTasksToLocalStorage(newTaskList);
   }
 
   function saveTasksToLocalStorage(tasks) {
-    // do stuff
+    localStorage.setItem("tasks", JSON.stringify(tasks));
   }
 
   function loadTasksFromLocalStorage() {
-    // do stuff
+    let loadedTasks = localStorage.getItem("tasks");
+
+    let tasks = JSON.parse(loadedTasks);
+
+    if (tasks) {
+      setTasks(tasks);
+    }
   }
 
   return (
